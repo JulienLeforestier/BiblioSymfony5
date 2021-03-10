@@ -1,0 +1,10 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<p>Bonjour,
+		{{ tableau.prenom ~ " " ~ tableau.nom }}
+		!</p>
+	<p>Pour accéder à une valeur d'un tableau associatif ou à une propriété d'un objet, j'utilise l'opérateur
+		<mark>.</mark>
+		dans Twig</p>
+{% endblock %}

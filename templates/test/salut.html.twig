@@ -1,0 +1,24 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<p>Bonjour,
+		{{ prenom }}
+		!</p>
+{% endblock %}
+
+{% block title %}Salutations!
+{% endblock %}
+
+{% block invisible %}
+	<p>Le contenu de ce block ne sera pas affiché parce qu'il n'existe pas dans base.html.twig mais il n'y aura pas d'erreur.</p>
+{% endblock %}
+
+{% block stylesheets %}
+	{# La fonction parent() permet de retourner le contenu du block de la vue parent, ce qui permet de ne pas l'écraser #}
+	{{ parent() }}
+	<style>
+		p {
+			color: red;
+		}
+	</style>
+{% endblock %}

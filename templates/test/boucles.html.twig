@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<h2>Boucle FOR</h2>
+	{% for i in 1..10 %}
+		{{ i ~ " -" }}
+	{% endfor %}
+	<br>
+	{% for i in 0..9 %}
+		{{ chiffres[i] }}
+	{% endfor %}
+	<hr>
+	<h2>Boucle FOREACH</h2>
+	{% for valeur in tableau %}
+		{{ valeur ~ " " }}
+	{% endfor %}
+	<br>
+	{# Exo : utiliser la boucle FOR sur l'array chiffres et afficher chaque valeur divisée par 12 #}
+	{% for chiffre in chiffres %}
+		{{ chiffre / 12 }}
+	{% endfor %}
+	<hr>
+{% endblock %}
