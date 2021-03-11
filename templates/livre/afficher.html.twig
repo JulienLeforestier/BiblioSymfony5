@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livre : Affichage
+{% endblock %}
+
+{% block body %}
+
+	<h2>Affichage du livre n°{{ livre.id }}
+	</h2>
+
+	<ul class="list-group">
+		<li class="list-group-item">
+			<strong>Titre :
+			</strong>
+			{{ livre.titre }}
+		</li>
+		<li class="list-group-item">
+			<strong>Auteur :
+			</strong>
+			{{ livre.auteur }}
+		</li>
+	</ul>
+	<br>
+	<a class="btn btn-primary" type="cancel" href="{{ path('accueil') }}">Accueil</a>
+
+
+{% endblock %}

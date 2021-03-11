@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
+use App\Repository\LivreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TestController extends AbstractController
@@ -110,5 +111,12 @@ class TestController extends AbstractController
             $prenom = $request->request->get("prenom");
             return $this->render("test/donnees.html.twig", compact("pseudo", "mdp", "email", "civilite", "nom", "prenom"));
         }
+    }
+
+    #[Route('/test/find', name: "test_find")]
+    public function testFind(LivreRepository $livreRepository)
+    {
+        $livres = $livreRepository->findBy(["titre" => "1984"]);
+        dd($livres);
     }
 }

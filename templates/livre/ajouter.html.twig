@@ -1,3 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}{% endblock %}
+{% block title %}Livre : Ajout/Modification
+{% endblock %}
+
+{% block body %}
+	<h2 class="mt-3">Ajouter ou modifier un livre</h2>
+	{{ form(formLivre) }}
+		<a class="btn btn-primary" type="cancel" href="{{ path('livre') }}">Annuler</a>
+	{% endblock %}

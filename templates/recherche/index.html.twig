@@ -1,9 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil
+{% block title %}Recherche
 {% endblock %}
 
 {% block body %}
+
+	<h2 class="mt-3">Résultat de la recherche :
+		{{ search }}</h2>
 	<div class="row">
 		{% for livre in liste_livres %}
 			<div class="col-4 mt-3">

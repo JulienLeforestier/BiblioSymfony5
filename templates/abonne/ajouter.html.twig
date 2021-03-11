@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Abonné : Ajout/Modification
+{% endblock %}
+
+{% block body %}
+	<h2 class="mt-3">Ajouter ou modifier un abonné</h2>
+	{{ form(formAbonne) }}
+		<a class="btn btn-primary" type="cancel" href="{{ path('abonne') }}">Annuler</a>
+	{% endblock %}
