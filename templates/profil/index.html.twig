@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil
+{% endblock %}
+
+{% block body %}
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Pseudo</th>
+				<td>{{ app.user.pseudo }}</td>
+			</tr>
+			<tr>
+				<th>Rôles</th>
+				{% for role in app.user.roles %}
+					{% if role is same as 'ROLE_ADMIN' %}
+						<td>Administrateur</td>
+					{% elseif role is same as 'ROLE_BIBLIOTHECAIRE' %}
+						<td>Bibliothécaire</td>
+					{% elseif role is same as 'ROLE_ABONNE' %}
+						<td>Abonné</td>
+					{% else %}
+						<td>Utilisateur</td>
+					{% endif %}
+				{% endfor %}
+			</tr>
+			<tr>
+				<th>Nom</th>
+				<td>{{ app.user.nom }}</td>
+			</tr>
+			<tr>
+				<th>Prénom</th>
+				<td>{{ app.user.prenom }}</td>
+			</tr>
+		</tbody>
+	</table>
+{% endblock %}

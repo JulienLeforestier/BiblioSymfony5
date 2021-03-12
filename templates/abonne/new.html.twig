@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvel abonné
+{% endblock %}
+
+{% block body %}
+	<h1>Créer un nouvel abonné</h1>
+
+	{{ include('abonne/_form.html.twig') }}
+	<br>
+	<a href="{{ path('abonne_index') }}" class="btn btn-primary">Retour</a>
+{% endblock %}

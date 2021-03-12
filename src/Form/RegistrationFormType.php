@@ -5,15 +5,16 @@ namespace App\Form;
 use App\Entity\Abonne;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordStrength;
 
-class AbonneType extends AbstractType
+class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -31,17 +32,24 @@ class AbonneType extends AbstractType
                     ])
                 ]
             ])
-            ->add('roles', ChoiceType::class, [
-                "choices" => [
-                    "Administrateur" => "ROLE_ADMIN",
-                    "Bibliothécaire" => "ROLE_BIBLIOTHECAIRE",
-                    "Abonné" => "ROLE_ABONNE"
-                ],
-                "multiple" => true,
-                "expanded" => true,
-                "label" => "Rôles"
+            ->add('nom', TextType::class, [
+                "constraints" => [
+                    new Length([
+                        "max" => 30,
+                        "maxMessage" => "Le nom doit comporter 30 caractères maximum",
+                    ])
+                ]
             ])
-            ->add('password', PasswordType::class, [
+            ->add('prenom', TextType::class, [
+                "label" => "Prénom",
+                "constraints" => [
+                    new Length([
+                        "max" => 30,
+                        "maxMessage" => "Le prénom doit comporter 30 caractères maximum",
+                    ])
+                ]
+            ])
+            ->add('plainPassword', PasswordType::class, [
                 "constraints" => [
                     new Length([
                         "max" => 255,
@@ -62,30 +70,22 @@ class AbonneType extends AbstractType
                     ])
                 ],
                 /**
-                 * Quand l'option 'mapped' vaut false, cela signifie que l'input 'password' ne doit pas être considéré comme une propriété
-                 * de l'objet Abonne => si on remplit l'input, la valeur ne sera pas affectée directement à l'objet Abonne
-                 * Du coup il faut gérer l'input côté controller
-                 */
+             * Quand l'option 'mapped' vaut false, cela signifie que l'input 'password' ne doit pas être considéré comme une propriété
+             * de l'objet Abonne => si on remplit l'input, la valeur ne sera pas affectée directement à l'objet Abonne
+             * Du coup il faut gérer l'input côté controller
+             */
                 "mapped" => false,
                 "required" => false,
-                "label" => "Mot de passe"
+                // "label" => "Mot de passe"
             ])
-            ->add('nom', TextType::class, [
-                "constraints" => [
-                    new Length([
-                        "max" => 30,
-                        "maxMessage" => "Le nom doit comporter 30 caractères maximum",
-                    ])
-                ]
-            ])
-            ->add('prenom', TextType::class, [
-                "label" => "Prénom",
-                "constraints" => [
-                    new Length([
-                        "max" => 30,
-                        "maxMessage" => "Le prénom doit comporter 30 caractères maximum",
-                    ])
-                ]
+            ->add('agreeTerms', CheckboxType::class, [
+                "label" => "C.G.U.",
+                'mapped' => false,
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Vous devez accpeter les C.G.U.'
+                    ]),
+                ],
             ]);
     }
 

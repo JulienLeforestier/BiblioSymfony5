@@ -27,11 +27,13 @@
 							<i class="fas fa-edit"></i>
 						</a>
 					</td>
-					<td>
-						<a href="{{ path("livre_supprimer", {id: livre.id}) }}">
-							<i class="fas fa-trash-alt"></i>
-						</a>
-					</td>
+					{% if is_granted('ROLE_ADMIN') %}
+						<td>
+							<a href="{{ path("livre_supprimer", {id: livre.id}) }}">
+								<i class="fas fa-trash-alt"></i>
+							</a>
+						</td>
+					{% endif %}
 				</tr>
 			{% endfor %}
 		</tbody>

@@ -5,67 +5,87 @@ namespace App\Controller;
 use App\Entity\Abonne;
 use App\Form\AbonneType;
 use App\Repository\AbonneRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+#[Route('/admin/abonne')]
 class AbonneController extends AbstractController
 {
-    #[Route('/abonne', name: 'abonne')]
+    #[Route('/', name: 'abonne_index', methods: ['GET'])]
     public function index(AbonneRepository $abonneRepository): Response
     {
-        $liste_abonnes = $abonneRepository->findAll();
-        return $this->render('abonne/index.html.twig', compact("liste_abonnes"));
+        return $this->render('abonne/index.html.twig', [
+            'abonnes' => $abonneRepository->findAll(),
+        ]);
     }
 
-    #[Route('/abonne/{id}', name: 'abonne_afficher', requirements: ['id' => '\d+'])]
-    public function afficher(Abonne $abonne)
+    #[Route('/new', name: 'abonne_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, UserPasswordEncoderInterface $encoder): Response
     {
-        return $this->render('abonne/afficher.html.twig', ["abonne" => $abonne]);
+        $abonne = new Abonne();
+        $form = $this->createForm(AbonneType::class, $abonne);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $password = $form->get("password")->getData();
+            $pass = $encoder->encodePassword($abonne, $password);
+            $abonne->setPassword($pass);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($abonne);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('abonne_index');
+        }
+
+        return $this->render('abonne/new.html.twig', [
+            'abonne' => $abonne,
+            'form' => $form->createView(),
+        ]);
     }
 
-    #[Route('/abonne/ajouter', name: 'abonne_ajouter')]
-    public function ajouter(Request $request, EntityManagerInterface $em)
+    #[Route('/{id}', name: 'abonne_show', methods: ['GET'])]
+    public function show(Abonne $abonne): Response
     {
-        $abonne = new Abonne;
-        $formAbonne = $this->createForm(AbonneType::class, $abonne);
-        $formAbonne->handleRequest($request);
-        if ($formAbonne->isSubmitted()) {
-            if ($formAbonne->isValid()){
-                $em->persist($abonne);
-                $em->flush();
-                $this->addFlash("success", "Le nouvel abonné a bien été enregistré");
-                return $this->redirectToRoute("abonne");
-            }else{
-                $this->addFlash("danger", "Le formulaire n'est pas valide");
+        return $this->render('abonne/show.html.twig', [
+            'abonne' => $abonne,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'abonne_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, UserPasswordEncoderInterface $encoder, Abonne $abonne): Response
+    {
+        $form = $this->createForm(AbonneType::class, $abonne);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $password = $form->get("password")->getData();
+            if ($password) {
+                $pass = $encoder->encodePassword($abonne, $password);
+                $abonne->setPassword($pass);
             }
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('abonne_index');
         }
-        return $this->render('abonne/ajouter.html.twig', ["formAbonne" => $formAbonne->createView()]);
+
+        return $this->render('abonne/edit.html.twig', [
+            'abonne' => $abonne,
+            'form' => $form->createView(),
+        ]);
     }
 
-    #[Route('/abonne/modifier/{id}', name: 'abonne_modifier', requirements: ['id' => '\d+'])]
-    public function modifier(Request $request, EntityManagerInterface $em, AbonneRepository $abonneRepository, $id)
+    #[Route('/{id}', name: 'abonne_delete', methods: ['DELETE'])]
+    public function delete(Request $request, Abonne $abonne): Response
     {
-        $abonne = $abonneRepository->find($id);
-        $formAbonne = $this->createForm(AbonneType::class, $abonne);
-        $formAbonne->handleRequest($request);
-        if ($formAbonne->isSubmitted() && $formAbonne->isValid()) {
-            $em->flush();
-            return $this->redirectToRoute("abonne");
+        if ($this->isCsrfTokenValid('delete' . $abonne->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($abonne);
+            $entityManager->flush();
         }
-        return $this->render('abonne/ajouter.html.twig', ["formAbonne" => $formAbonne->createView()]);
-    }
 
-    #[Route('/abonne/supprimer/{id}', name: 'abonne_supprimer', requirements: ['id' => '\d+'])]
-    public function supprimer(Request $request, EntityManagerInterface $em, Abonne $abonne)
-    {
-        if ($request->isMethod("POST")) {
-            $em->remove($abonne);
-            $em->flush();
-            return $this->redirectToRoute("abonne");
-        }
-        return $this->render("abonne/supprimer.html.twig", compact("abonne"));
+        return $this->redirectToRoute('abonne_index');
     }
 }

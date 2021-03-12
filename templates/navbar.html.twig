@@ -6,27 +6,56 @@
 
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
-			<li class="nav-item">
-				<a class="nav-link" href="">Link</a>
-			</li>
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Livres
-				</a>
-				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="{{ path("livre") }}">Liste</a>
-					<a class="dropdown-item" href="{{ path("livre_ajouter") }}">Ajouter</a>
-				</div>
-			</li>
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Abonnés
-				</a>
-				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<a class="dropdown-item" href="{{ path("abonne") }}">Liste</a>
-					<a class="dropdown-item" href="{{ path("abonne_ajouter") }}">Ajouter</a>
-				</div>
-			</li>
+			{% if not is_granted('ROLE_USER') %}
+				{# {% if not app.user %} #}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ path("app_register") }}">
+						<i class="fas fa-registered"></i>
+						Inscription
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ path("app_login") }}">
+						<i class="fas fa-sign-in-alt"></i>
+						Connexion
+					</a>
+				</li>
+			{% else %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ path("profil") }}">
+						<i class="fas fa-user"></i>
+						Profil
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ path("app_logout") }}">
+						<i class="fas fa-sign-out-alt"></i>
+						Déconnexion
+					</a>
+				</li>
+			{% endif %}
+			{% if is_granted('ROLE_BIBLIOTHECAIRE') %}
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Livres
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" href="{{ path("livre") }}">Liste</a>
+						<a class="dropdown-item" href="{{ path("livre_ajouter") }}">Ajouter</a>
+					</div>
+				</li>
+				{% if is_granted('ROLE_ADMIN') %}
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Abonnés
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="{{ path("abonne_index") }}">Liste</a>
+							<a class="dropdown-item" href="{{ path("abonne_new") }}">Ajouter</a>
+						</div>
+					</li>
+				{% endif %}
+			{% endif %}
 		</ul>
 		<form class="form-inline my-2 my-lg-0" action="{{ path("recherche") }}">
 			<input class="form-control mr-sm-2" type="search" name="search" placeholder="Rechercher..." aria-label="Search">
