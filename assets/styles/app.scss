@@ -1,0 +1,16 @@
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+@import "~bootstrap/scss/bootstrap";
+
+html {
+    min-height: 100vh;
+    position  : relative;
+}
+
+body {
+    background-color: lightgrey;
+}
+
+footer {
+    position: absolute;
+    bottom  : 0;
+}

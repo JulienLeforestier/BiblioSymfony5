@@ -18,13 +18,15 @@ class LivreController extends AbstractController
     public function index(LivreRepository $livreRepository): Response
     {
         $liste_livres = $livreRepository->findAll();
-        return $this->render('livre/index.html.twig', compact("liste_livres"));
+        $liste_livres_indispos = $livreRepository->findByAvailable();
+        return $this->render('livre/index.html.twig', compact("liste_livres", "liste_livres_indispos"));
     }
 
     #[Route('/livre/{id}', name: 'livre_afficher', requirements: ['id' => '\d+'])]
-    public function afficher(Livre $livre)
+    public function afficher(Livre $livre, LivreRepository $livreRepository)
     {
-        return $this->render('livre/afficher.html.twig', ["livre" => $livre]);
+        $liste_livres_indispos = $livreRepository->findByAvailable();
+        return $this->render('livre/afficher.html.twig', ["livre" => $livre, "liste_livres_indispos" => $liste_livres_indispos]);
     }
 
     #[Route('/livre/ajouter', name: 'livre_ajouter')]

@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Livre;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Livre|null find($id, $lockMode = null, $lockVersion = null)
@@ -31,6 +31,15 @@ class LivreRepository extends ServiceEntityRepository
             ->orderBy('l.titre', 'ASC')
             ->addOrderBy('l.auteur')
             ->setMaxResults(100)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByAvailable()
+    {
+        return $this->createQueryBuilder('l')
+            ->innerJoin('l.emprunts', 'e')
+            ->where('e.date_retour IS NULL')
             ->getQuery()
             ->getResult();
     }

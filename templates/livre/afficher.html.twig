@@ -21,7 +21,8 @@
 		</li>
 	</ul>
 	<br>
+	<a href="{{ path("profil_emprunter", {id: livre.id}) }}" class="btn btn-primary {{ livre in liste_livres_indispos ? 'disabled' : '' }}">Emprunter</a>
+	<br><br>
 	<a class="btn btn-primary" type="cancel" href="{{ path('livre') }}">Retour</a>
-
 
 {% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Emprunts
+{% endblock %}
+
+{% block body %}
+	<h1>Emprunts</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Date d'emprunt</th>
+				<th>Date de retour</th>
+				<th>Abonné</th>
+				<th>Livre</th>
+				<th colspan="2">Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for emprunt in emprunts %}
+				<tr>
+					<td>{{ emprunt.id }}</td>
+					<td>{{ emprunt.dateEmprunt ? emprunt.dateEmprunt|date('d-m-Y') : '' }}</td>
+					<td>{{ emprunt.dateRetour ? emprunt.dateRetour|date('d-m-Y') : '' }}</td>
+					<td>{{ emprunt.abonne.pseudo }}</td>
+					<td>{{ emprunt.livre.titre }}
+						-
+						{{ emprunt.livre.auteur }}</td>
+					<td>
+						<a href="{{ path('emprunt_show', {'id': emprunt.id}) }}">
+							<i class="fas fa-eye"></i>
+						</a>
+					</td>
+					<td>
+						<a href="{{ path('emprunt_edit', {'id': emprunt.id}) }}">
+							<i class="fas fa-edit"></i>
+						</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="7">Aucun résultat</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<a href="{{ path('emprunt_index') }}">Liste complète des emprunts</a>
+	<br>
+	<a href="{{ path('emprunt_whitout_return') }}">Liste des emprunts non rendus</a>
+{% endblock %}

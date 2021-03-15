@@ -9,19 +9,10 @@
 		</title>
 		{# Run `composer require symfony/webpack-encore-bundle` and uncomment the following Encore helpers to start using Symfony UX #}
 		{% block stylesheets %}
-			{#{{ encore_entry_link_tags('app') }}#}
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha512-P5MgMn1jBN01asBgU0z60Qk4QxiXo86+wlFahKrsQf37c9cro517WzVSPPV1tDKzhku2iJ2FVgL67wG03SGnNA==" crossorigin="anonymous"/>
-			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous"/>
-			<style>
-				body {
-					background-color: beige;
-				}
-			</style>
+			{{ encore_entry_link_tags('app') }}
 		{% endblock %}
 		{% block javascripts %}
-			{#{{ encore_entry_script_tags('app') }}#}
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js" integrity="sha512-6ORWJX/LrnSjBzwefdNUyLCMTIsGoNP6NftMy2UAm1JBm6PRZCO1d7OHBStWpVFZLO+RerTvqX/Z9mBFfCJZ4A==" crossorigin="anonymous"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js" integrity="sha512-XKa9Hemdy1Ui3KSGgJdgMyYlUg1gM+QhL6cnlyTe2qzMCYm4nAZ1PsVerQzTTXzonUR+dmswHqgJPuwCq1MaAg==" crossorigin="anonymous"></script>
+			{{ encore_entry_script_tags('app') }}
 		{% endblock %}
 	</head>
 
@@ -37,6 +28,23 @@
 				{% endfor %}
 			{% endfor %}
 			{% block body %}{% endblock %}
+			<footer class="container">
+				<div class="row">
+					<div class="col bg-dark text-light text-center py-3">
+						.
+						<a href="">Mentions légales</a>
+						.
+						<a href="">Conditions générales d'utilisations</a>
+						.
+						<a href="">Contact</a>
+						.
+						<br>
+						&copy;
+						{{ "now"|date("Y") }}
+						- Biblio - Tous droits réservés
+					</div>
+				</div>
+			</footer>
 		</div>
 
 	</body>

@@ -32,6 +32,12 @@
 				<th>Prénom</th>
 				<td>{{ app.user.prenom }}</td>
 			</tr>
+			<tr>
+				<th>Emprunts</th>
+				{% for emprunt in app.user.emprunts %}
+					<td>{{ emprunt.id ~ " - " ~ emprunt.livre.titre }}</td>
+				{% endfor %}
+			</tr>
 		</tbody>
 	</table>
 {% endblock %}

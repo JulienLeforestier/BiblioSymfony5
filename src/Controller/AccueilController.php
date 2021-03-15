@@ -13,6 +13,7 @@ class AccueilController extends AbstractController
     public function index(LivreRepository $livreRepository): Response
     {
         $liste_livres = $livreRepository->findAll();
-        return $this->render('accueil/index.html.twig', compact("liste_livres"));
+        $liste_livres_indispos = $livreRepository->findByAvailable();
+        return $this->render('accueil/index.html.twig', compact("liste_livres", "liste_livres_indispos"));
     }
 }
