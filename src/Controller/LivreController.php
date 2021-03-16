@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/biblio')]
+#[Route('/biblio/livre')]
 class LivreController extends AbstractController
 {
-    #[Route('/livre', name: 'livre')]
+    #[Route('/', name: 'livre')]
     public function index(LivreRepository $livreRepository): Response
     {
         $liste_livres = $livreRepository->findAll();
@@ -22,14 +22,14 @@ class LivreController extends AbstractController
         return $this->render('livre/index.html.twig', compact("liste_livres", "liste_livres_indispos"));
     }
 
-    #[Route('/livre/{id}', name: 'livre_afficher', requirements: ['id' => '\d+'])]
+    #[Route('/{id}', name: 'livre_afficher', requirements: ['id' => '\d+'])]
     public function afficher(Livre $livre, LivreRepository $livreRepository)
     {
         $liste_livres_indispos = $livreRepository->findByAvailable();
         return $this->render('livre/afficher.html.twig', ["livre" => $livre, "liste_livres_indispos" => $liste_livres_indispos]);
     }
 
-    #[Route('/livre/ajouter', name: 'livre_ajouter')]
+    #[Route('/ajouter', name: 'livre_ajouter')]
     public function ajouter(Request $request, EntityManagerInterface $em)
     {
         $livre = new Livre;
@@ -52,7 +52,7 @@ class LivreController extends AbstractController
         return $this->render('livre/ajouter.html.twig', ["formLivre" => $formLivre->createView()]);
     }
 
-    #[Route('/livre/modifier/{id}', name: 'livre_modifier', requirements: ['id' => '\d+'])]
+    #[Route('/modifier/{id}', name: 'livre_modifier', requirements: ['id' => '\d+'])]
     public function modifier(Request $request, EntityManagerInterface $em, LivreRepository $livreRepository, $id)
     {
         $livre = $livreRepository->find($id);
@@ -68,7 +68,7 @@ class LivreController extends AbstractController
         return $this->render('livre/ajouter.html.twig', ["formLivre" => $formLivre->createView()]);
     }
 
-    #[Route('/livre/supprimer/{id}', name: 'livre_supprimer', requirements: ['id' => '\d+'])]
+    #[Route('/supprimer/{id}', name: 'livre_supprimer', requirements: ['id' => '\d+'])]
     public function supprimer(Request $request, EntityManagerInterface $em, Livre $livre)
     {
         // On peut faire un autowire (injection de dépendence) de $livre grâce à l'id
