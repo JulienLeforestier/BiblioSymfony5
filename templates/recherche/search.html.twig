@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche
+{% endblock %}
+
+{% block body %}
+
+	{% if search is defined %}
+		<h2 class="mt-3">Résultat de la recherche :
+			{{ search }}</h2>
+		<div class="row">
+			{% for abonne in liste_abonnes %}
+				<div class="col-4 mt-3">
+					{% include "abonne/cards.html.twig" with { a: abonne } %}
+				</div>
+			{% endfor %}
+		</div>
+		<div class="row">
+			{% for livre in liste_livres %}
+				<div class="col-4 mt-3">
+					{% include "livre/cards.html.twig" with { l: livre } %}
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+		{{ form_start(form) }}
+		{{ form_end(form) }}
+	{% endif %}
+
+{% endblock %}

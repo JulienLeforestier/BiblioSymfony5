@@ -4,12 +4,14 @@ namespace App\Form;
 
 use App\Entity\Livre;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\File;
 
 class LivreType extends AbstractType
 {
@@ -41,6 +43,18 @@ class LivreType extends AbstractType
                     ]),
                     new NotBlank([
                         "message" => "Le nom d'auteur ne peut être vide"
+                    ])
+                ]
+            ])
+            ->add('couverture', FileType::class, [
+                "mapped" => false,
+                "required" => false,
+                "constraints" => [
+                    new File([
+                        "mimeTypes" => ["image/gif", "image/jpeg", "image/png"],
+                        "mimeTypesMessage" => "Les formats autorisés sont gif, jpg et png",
+                        "maxSize" => "2048k",
+                        "maxSizeMessage" => "Le fichier ne doit pas faire plus de 2Mo"
                     ])
                 ]
             ])

@@ -57,9 +57,9 @@ class AbonneType extends AbstractType
                     //     "pattern" => "/^(?=.{6,10}$)(?=.*[a-z])(?=.[A-Z])(?=.*[0-9])(?=.*/W).*$/",
                     //     "message" => "Le mot de passe doit comporter entre 6 et 10 caractères, une minuscule, une majuscule, un chiffre et un caractère spécial"
                     // ]),
-                    new NotBlank([
-                        "message" => "Le mot de passe ne peut être vide"
-                    ])
+                    // new NotBlank([
+                    //     "message" => "Le mot de passe ne peut être vide"
+                    // ])
                 ],
                 /**
                  * Quand l'option 'mapped' vaut false, cela signifie que l'input 'password' ne doit pas être considéré comme une propriété

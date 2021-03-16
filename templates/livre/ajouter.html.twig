@@ -5,6 +5,15 @@
 
 {% block body %}
 	<h2 class="mt-3">Ajouter ou modifier un livre</h2>
-	{{ form(formLivre) }}
-		<a class="btn btn-primary" type="cancel" href="{{ path('livre') }}">Annuler</a>
-	{% endblock %}
+	{{ form_start(formLivre) }}
+	{{ form_row(formLivre.titre) }}
+	{{ form_row(formLivre.auteur) }}
+	<div class="row">
+		<img src="{{ url_images_livres ~ formLivre.vars.value.couverture }}" alt="imageForm" class="col-2">
+		{{ form_row(formLivre.couverture, {attr: {class: "col-10"}}) }}
+	</div>
+	<br>
+	{{ form_widget(formLivre.enregistrer) }}
+	<a class="btn btn-primary ml-2" type="cancel" href="{{ path('livre') }}">Annuler</a>
+	{{ form_end(formLivre) }}
+{% endblock %}

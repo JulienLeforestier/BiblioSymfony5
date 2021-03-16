@@ -40,12 +40,25 @@ class LivreController extends AbstractController
         // On va aussi pouvoir savoir si le formulaire a été soumis et si il est valide
         $formLivre->handleRequest($request);
         if ($formLivre->isSubmitted()) {
-            if ($formLivre->isValid()){
+            if ($formLivre->isValid()) {
+                $fichier = $formLivre->get("couverture")->getData();
+                if ($fichier) {
+                    // La méthode pathinfo() permet de récupérer des informations sur un fichier, par exemple le nom du fichier sans le chemin complet ni l'extension
+                    // La méthode getClientOriginalName() récupère le nom du fichier uploadé 
+                    // (la méthode est exécutée à partir de lo'bjet instancié par getData() que l'on a exécuté sur l'objet formulaire)
+                    $nomFichier = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME);
+                    $nomFichier .= "_" . time();
+                    $nomFichier .= "." . $fichier->guessExtension(); // La méthode guessExtension() permet de récupérer l'extension d'un fichier
+                    $nomFichier = str_replace(' ', '_', $nomFichier);
+                    $destination = $this->getParameter("dossier_images") . "livres";
+                    $fichier->move($destination, $nomFichier);
+                    $livre->setCouverture($nomFichier);
+                }
                 $em->persist($livre); // La méthode persist() prépare la requête INSERT INTO à partir de l'objet entity passé en paramètre
                 $em->flush(); // La méthode flush() exécute les requêtes en attente
                 $this->addFlash("success", "Le nouveau livre a bien été enregistré"); // La méthode addFlash() permet de stocker un message en SESSION
                 return $this->redirectToRoute("livre");
-            }else{
+            } else {
                 $this->addFlash("danger", "Le formulaire n'est pas valide");
             }
         }
@@ -59,10 +72,20 @@ class LivreController extends AbstractController
         $formLivre = $this->createForm(LivreType::class, $livre);
         $formLivre->handleRequest($request);
         if ($formLivre->isSubmitted() && $formLivre->isValid()) {
+            if ($fichier = $formLivre->get("couverture")->getData()) { // Affectation puis test d'existence dans le if
+                $nomFichier = pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME) . "_" . time() . "." . $fichier->guessExtension();
+                $nomFichier = str_replace(' ', '_', $nomFichier);
+                $destination = $this->getParameter("dossier_images") . "livres";
+                $fichier->move($destination, $nomFichier);
+                $ancienFichier = $destination . "/" . $livre->getCouverture();
+                if (file_exists($ancienFichier) && $livre->getCouverture()) unlink($ancienFichier);
+                $livre->setCouverture($nomFichier);
+            }
             // $em->persist($livre); 
             // Dès qu'un objet entity a un id non null, 
             // EntityManager va mettre la bdd à jour avec les informations de cet objet quand la méthode flush() sera exécutée
             $em->flush();
+            $this->addFlash("success", "Le livre a bien été modifié");
             return $this->redirectToRoute("livre");
         }
         return $this->render('livre/ajouter.html.twig', ["formLivre" => $formLivre->createView()]);
@@ -73,8 +96,12 @@ class LivreController extends AbstractController
     {
         // On peut faire un autowire (injection de dépendence) de $livre grâce à l'id
         if ($request->isMethod("POST")) {
+            $nomFichier = $livre->getCouverture();
+            $ancienFichier = $this->getParameter("dossier_images") . "livres" . "/" . $nomFichier;
             $em->remove($livre);
             $em->flush();
+            if (file_exists($ancienFichier) && $nomFichier) unlink($ancienFichier);
+            $this->addFlash("success", "Le livre a bien été supprimé");
             return $this->redirectToRoute("livre");
         }
         return $this->render("livre/supprimer.html.twig", compact("livre"));

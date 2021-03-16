@@ -19,6 +19,11 @@
 			</strong>
 			{{ livre.auteur }}
 		</li>
+		<li class="list-group-item">
+			<strong>Couverture :
+			</strong>
+			<img class="img" src="{{ url_images_livres ~ livre.couverture }}" alt="{{ livre.couverture }}">
+		</li>
 	</ul>
 	<br>
 	<form method="post">

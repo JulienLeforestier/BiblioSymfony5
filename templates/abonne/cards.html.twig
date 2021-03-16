@@ -1,0 +1,8 @@
+<div class="card" style="width: 18rem;">
+	{# <img class="card-img-top" src="{{ url_images_livres ~ l.couverture }}" alt="Card image"> #}
+	<div class="card-body">
+		<h5 class="card-title">{{ a.pseudo }}</h5>
+		<p class="card-text">{{ a.nom ~ " " ~ a.prenom }}</p>
+		<a href="{{ path("abonne_show", {id: a.id}) }}" class="btn btn-primary">Afficher</a>
+	</div>
+</div>

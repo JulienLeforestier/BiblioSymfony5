@@ -1,12 +1,8 @@
 <div class="card" style="width: 18rem;">
-	<img class="card-img-top" src="..." alt="Card image">
+	<img class="card-img-top" src="{{ url_images_livres ~ l.couverture }}" alt="Card image">
 	<div class="card-body">
 		<h5 class="card-title">{{ l.titre }}</h5>
 		<p class="card-text">{{ l.auteur }}</p>
-		{# <a href="{{ path("livre_afficher", {id: l.id}) }}" class="btn btn-primary">
-			<i class="fas fa-eye"></i>
-			Voir
-		</a> #}
 		<a href="{{ path("profil_emprunter", {id: l.id}) }}" class="btn btn-primary {{ l in liste_livres_indispos ? 'disabled' : '' }}">Emprunter</a>
 	</div>
 </div>
